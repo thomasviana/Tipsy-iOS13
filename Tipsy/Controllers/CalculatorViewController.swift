@@ -19,6 +19,7 @@ class CalculatorViewController: UIViewController {
     var tip = 0.10
     var people = 2
     var billValue = 0.0
+    var finalResult = 0.0
     
     @IBAction func tipChanged(_ sender: UIButton) {
         
@@ -49,8 +50,20 @@ class CalculatorViewController: UIViewController {
         }
         
         let result = billValue * (1 + tip) / Double(people)
-        let finalResult = String(format: "%.2f", result)
-        print(finalResult)
+        let resultAsString = String(format: "%.2f", result)
+        finalResult = Double(resultAsString)!
+        
+        performSegue(withIdentifier: "goToResult", sender: self)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult" {
+            let resultsVC = segue.destination as! ResultsViewController
+            resultsVC.billTotal = finalResult
+            resultsVC.tip = Int(tip*100)
+            resultsVC.peopleNumber = Int(people)
+        }
     }
     
 }
